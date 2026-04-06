@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>14B Timesheet Entry Modal</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    .modal-demo { position: relative; margin-top: 16px; min-height: 680px; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #fff; }
+    .modal-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.48); display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .modal-card { width: min(760px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 24px 50px rgba(15, 23, 42, 0.22); overflow: hidden; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%); }
+    .modal-title { font-size: 22px; font-weight: 800; }
+    .modal-subtitle { margin-top: 4px; color: var(--muted); font-size: 14px; }
+    .modal-body { padding: 20px; }
+    .modal-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 18px 20px 20px; border-top: 1px solid var(--line); background: #fcfdff; }
+    .close-x { width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--line); background: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Kado Timesheet</div>
+      <div class="nav-group-title">Employee</div>
+      <ul class="nav">
+        <li>Dashboard</li>
+        <li class="active">Timesheet</li>
+        <li>My Reports</li>
+        <li>Profile</li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Nhập Timesheet - Biến thể Modal (Entry + Details)</div>
+          <div class="page-subtitle">Mở modal để thêm detail vào entry của một ngày, rồi submit entry một lần</div>
+        </div>
+        <div class="actions">
+          <a class="btn" href="./14-timesheet-entry.html">Về màn list/grid</a>
+          <a class="btn" href="./14a-timesheet-entry-form.html">Xem form-page</a>
+          <a class="btn" href="./index.html">Index</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Bối cảnh màn hình gốc</div>
+        <div class="card-body">
+          <p>User đang thao tác entry của ngày <strong>2026-04-03</strong>. Bấm <strong>“+ Thêm detail”</strong> để mở modal và thêm dòng project/hours/note.</p>
+          <div class="actions" style="margin-top:12px;">
+            <button class="btn primary">+ Thêm detail</button>
+            <button class="btn success">Submit entry</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-demo">
+        <div class="card" style="margin:16px;">
+          <div class="card-header">Entry ngày 2026-04-03 - danh sách details hiện tại</div>
+          <div class="card-body">
+            <table class="table">
+              <tr>
+                <th>Project</th>
+                <th>Số giờ</th>
+                <th>Ghi chú detail</th>
+                <th>Thao tác</th>
+              </tr>
+              <tr>
+                <td>ALLRORA QC</td>
+                <td>2.5</td>
+                <td>Kiểm thử flow QC nội bộ</td>
+                <td>Sửa | Xóa</td>
+              </tr>
+              <tr>
+                <td>WORK DESIGN 4</td>
+                <td>2.0</td>
+                <td>Kiểm tra ticket WDP-421</td>
+                <td>Sửa | Xóa</td>
+              </tr>
+            </table>
+            <div class="note">Tổng giờ hiện tại của entry: <strong>4.5h</strong>. Có thể thêm detail mới rồi submit entry.</div>
+          </div>
+        </div>
+
+        <div class="modal-overlay">
+          <div class="modal-card">
+            <div class="modal-head">
+              <div>
+                <div class="modal-title">Thêm detail vào entry ngày 2026-04-03</div>
+                <div class="modal-subtitle">Nhập project, giờ làm và ghi chú cho một dòng detail</div>
+              </div>
+              <button class="close-x">×</button>
+            </div>
+
+            <div class="modal-body">
+              <div class="grid-2">
+                <div class="card">
+                  <div class="card-header">Thông tin detail</div>
+                  <div class="card-body">
+                    <div class="stack">
+                      <div>
+                        <label class="field-label">Project</label>
+                        <select class="select">
+                          <option>ALLRORA QC</option>
+                          <option>WORK DESIGN 4</option>
+                          <option>Softbank AI</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label class="field-label">Số giờ làm việc</label>
+                        <input class="field" value="2.5">
+                      </div>
+                      <div>
+                        <label class="field-label">Ghi chú detail</label>
+                        <textarea class="textarea">Kiểm thử giao diện, xác nhận lỗi và cập nhật kết quả thực hiện cho project.</textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">Quy tắc kiểm tra</div>
+                  <div class="card-body">
+                    <div class="list">
+                      <div class="list-item">
+                        <span>Project chỉ lấy từ danh sách đã assign</span>
+                        <span class="pill blue">Rule</span>
+                      </div>
+                      <div class="list-item">
+                        <span>Số giờ cho phép nhập lẻ 0.25 / 0.5</span>
+                        <span class="pill green">Rule</span>
+                      </div>
+                      <div class="list-item">
+                        <span>Tổng giờ entry theo ngày không vượt 24h</span>
+                        <span class="pill orange">Rule</span>
+                      </div>
+                    </div>
+                    <div class="note">
+                      Modal này chỉ thêm một detail vào entry đang chọn. Sau khi thêm nhiều detail, người dùng bấm <strong>Submit entry</strong> ở màn nền để gửi 1 request lưu toàn bộ header + details.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-foot">
+              <button class="btn">Hủy</button>
+              <button class="btn success">+ Thêm detail</button>
+              <button class="btn primary">Thêm và tạo dòng mới</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
