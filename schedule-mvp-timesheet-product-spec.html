@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Spec - Schedule MVP Hệ Thống Quản Lý Giờ Làm Việc Theo Dự Án</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --panel-soft: #f9fbfd;
+      --text: #17212b;
+      --muted: #66758a;
+      --line: #e2e8f0;
+      --line-strong: #cbd5e1;
+      --brand: #155eef;
+      --brand-soft: #eaf2ff;
+      --success: #0f766e;
+      --warn: #b45309;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --content-width: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(21, 94, 239, 0.05) 0%, rgba(21, 94, 239, 0) 180px),
+        var(--bg);
+      color: var(--text);
+      font-family: "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.65;
+      padding: 24px;
+    }
+
+    .page {
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+
+    .spec-header {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .spec-topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+    }
+
+    .spec-title {
+      padding: 28px 28px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--brand);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      margin: 14px 0 0;
+      color: var(--muted);
+      max-width: 840px;
+      font-size: 15px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      padding: 20px 28px 28px;
+    }
+
+    .meta-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+    }
+
+    .meta-label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .meta-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .toc {
+      padding: 20px 18px;
+    }
+
+    .panel-title {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand);
+    }
+
+    .toc ul,
+    .quick-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .toc li + li,
+    .quick-list li + li {
+      margin-top: 8px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 9px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .toc a:hover {
+      background: var(--brand-soft);
+      color: var(--brand);
+    }
+
+    .quick {
+      padding: 18px;
+    }
+
+    .quick-list li {
+      position: relative;
+      padding-left: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .quick-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--brand);
+    }
+
+    .content {
+      display: grid;
+      gap: 16px;
+    }
+
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .section-head {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .section-body {
+      padding: 20px 22px 22px;
+    }
+
+    .section-body > :first-child {
+      margin-top: 0;
+    }
+
+    h3 {
+      margin: 22px 0 10px;
+      font-size: 18px;
+      color: #0f172a;
+    }
+
+    h4 {
+      margin: 16px 0 8px;
+      font-size: 14px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    ul {
+      margin: 8px 0 12px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .callout {
+      margin-top: 14px;
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+
+    .callout-title {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      background: #fff;
+    }
+
+    .mini-card h4 {
+      margin-top: 0;
+      color: var(--brand);
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 15px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border: 1px solid #cfe0ff;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .status-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .status-table th,
+    .status-table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .status-table th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .status-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 0.92em;
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      body {
+        padding: 14px;
+      }
+
+      .meta-grid,
+      .layout,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .spec-title,
+      .meta-grid {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .section-head,
+      .section-body {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .panel,
+      .section,
+      .spec-header {
+        box-shadow: none;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        margin: 18px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="spec-header">
+      <div class="spec-topbar">
+        <div>Document Type: Product Specification</div>
+        <div>Scope: MVP Timesheet System</div>
+      </div>
+      <div class="spec-title">
+        <div class="eyebrow">Product Spec</div>
+        <h1>Schedule MVP Hệ Thống Quản Lý Giờ Làm Việc Theo Dự Án</h1>
+        <p class="subtitle">Tài liệu đặc tả phạm vi giai đoạn đầu cho hệ thống timesheet nội bộ. Mục tiêu là chuẩn hóa nghiệp vụ nhập giờ theo dự án, hỗ trợ thống kê theo tháng và tạo nền tảng để mở rộng sang dashboard, notification và phân tích hiệu quả dự án trong các giai đoạn sau.</p>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="meta-label">Trạng thái</div>
+          <div class="meta-value">Draft Approved Scope</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Đối tượng</div>
+          <div class="meta-value">Admin / Employee</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Mục tiêu triển khai</div>
+          <div class="meta-value">MVP nội bộ</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Lộ trình</div>
+          <div class="meta-value">Schedule → Tài liệu → Code → Test</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="panel toc">
+          <div class="panel-title">Table of Contents</div>
+          <ul>
+            <li><a href="#muc-tieu">1. Mục tiêu</a></li>
+            <li><a href="#pham-vi">2. Phạm vi triển khai</a></li>
+            <li><a href="#vai-tro">3. Vai trò người dùng</a></li>
+            <li><a href="#tinh-nang">4. Phạm vi tính năng MVP</a></li>
+            <li><a href="#quy-tac">5. Quy tắc nghiệp vụ</a></li>
+            <li><a href="#slack">6. Notification Slack</a></li>
+            <li><a href="#ky-thuat">7. Định hướng kỹ thuật</a></li>
+            <li><a href="#mo-rong">8. Hạng mục mở rộng</a></li>
+            <li><a href="#tai-lieu">9. Điểm làm rõ ở bước tài liệu</a></li>
+            <li><a href="#ket-luan">10. Kết luận</a></li>
+          </ul>
+        </div>
+
+        <div class="panel quick">
+          <div class="panel-title">Key Decisions</div>
+          <ul class="quick-list">
+            <li>Nhập giờ trực tiếp theo số, không nhập theo time range.</li>
+            <li>Cho nhập quá khứ, không cho nhập tương lai.</li>
+            <li>Không lock tháng trong MVP.</li>
+            <li>Không có approval workflow.</li>
+            <li>Slack chỉ nhắc người chưa nhập công sau 20:00 JST.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section class="section" id="muc-tieu">
+          <div class="section-head">
+            <h2 class="section-title">1. Mục tiêu</h2>
+          </div>
+          <div class="section-body">
+            <p class="lead">Xây dựng hệ thống web thay thế file Excel nhập giờ làm việc theo dự án để đồng bộ dữ liệu, giảm thao tác thủ công và tạo nền tảng mở rộng cho vận hành nội bộ.</p>
+            <div class="callout">
+              <div class="callout-title">Expected Outcomes</div>
+              <ul>
+                <li>Quản lý tập trung dữ liệu nhân viên, dự án và giờ làm việc.</li>
+                <li>Cho nhân viên đăng nhập và nhập giờ làm việc theo ngày, theo dự án.</li>
+                <li>Cho admin theo dõi, thống kê và xuất báo cáo theo nhiều tiêu chí.</li>
+                <li>Tạo nền tảng để mở rộng về dashboard, Slack bot, profit/loss và các tính năng quản trị nâng cao trong tương lai.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="pham-vi">
+          <div class="section-head">
+            <h2 class="section-title">2. Phạm vi triển khai giai đoạn đầu</h2>
+          </div>
+          <div class="section-body">
+            <p>Giai đoạn đầu sẽ tập trung theo lộ trình:</p>
+            <div class="tag-row">
+              <span class="tag">Schedule</span>
+              <span class="tag">Tài liệu</span>
+              <span class="tag">Code</span>
+              <span class="tag">Test</span>
+            </div>
+            <p>Tài liệu này là phần chốt phạm vi <strong>Schedule cho MVP</strong>.</p>
+          </div>
+        </section>
+
+        <section class="section" id="vai-tro">
+          <div class="section-head">
+            <h2 class="section-title">3. Vai trò người dùng</h2>
+          </div>
+          <div class="section-body">
+            <div class="grid-2">
+              <div class="mini-card">
+                <h4>Admin</h4>
+                <ul>
+                  <li>Quản lý project.</li>
+                  <li>Quản lý nhân viên và tài khoản người dùng.</li>
+                  <li>Gán project cho nhân viên.</li>
+                  <li>Xem báo cáo, thống kê, dashboard.</li>
+                  <li>Xuất dữ liệu báo cáo.</li>
+                  <li>Quản lý các danh mục phụ trợ.</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>Employee</h4>
+                <ul>
+                  <li>Đăng nhập.</li>
+                  <li>Xem project được assign.</li>
+                  <li>Nhập giờ theo ngày và project.</li>
+                  <li>Xem thống kê cá nhân.</li>
+                  <li>Cập nhật thông tin cá nhân.</li>
+                  <li>Đổi mật khẩu hoặc quên mật khẩu.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tinh-nang">
+          <div class="section-head">
+            <h2 class="section-title">4. Phạm vi tính năng MVP</h2>
+          </div>
+          <div class="section-body">
+            <h3>4.1. Tính năng chung</h3>
+            <ul>
+              <li>Đăng nhập hệ thống.</li>
+              <li>Phân quyền theo vai trò <code>admin</code> và <code>employee</code>.</li>
+              <li>Quản lý phiên đăng nhập bằng JWT.</li>
+              <li>Đổi mật khẩu.</li>
+              <li>Quên mật khẩu qua email.</li>
+              <li>Admin có thể reset mật khẩu cho nhân viên.</li>
+            </ul>
+
+            <h3>4.2. Tính năng cho Admin</h3>
+            <h4>Quản lý project</h4>
+            <ul>
+              <li>Thêm project.</li>
+              <li>Sửa project.</li>
+              <li>Xóa project.</li>
+              <li>Cập nhật trạng thái project: <code>active</code>, <code>inactive</code>, <code>archived</code>.</li>
+              <li>Cấu hình thuộc tính mở rộng như <code>billable / non-billable</code> để dự trù cho báo cáo nâng cao và profit/loss.</li>
+            </ul>
+
+            <h4>Quản lý nhân viên</h4>
+            <ul>
+              <li>Thêm nhân viên.</li>
+              <li>Sửa thông tin nhân viên.</li>
+              <li>Khóa/mở tài khoản nếu cần.</li>
+              <li>Quản lý thông tin cơ bản: tên, email, số điện thoại, vị trí/chức danh, phòng ban, avatar.</li>
+            </ul>
+
+            <h4>Quản lý phân công project</h4>
+            <ul>
+              <li>Gán project cho nhân viên.</li>
+              <li>Thu hồi project khỏi nhân viên.</li>
+              <li>Nhân viên chỉ được nhìn thấy và nhập giờ trên các project đã được assign.</li>
+            </ul>
+
+            <h4>Quản lý danh mục phụ trợ</h4>
+            <ul>
+              <li>Phòng ban.</li>
+              <li>Chức danh.</li>
+              <li>Loại công việc.</li>
+            </ul>
+
+            <h4>Báo cáo và thống kê</h4>
+            <ul>
+              <li>Thống kê tổng số giờ theo nhân viên, project, tháng.</li>
+              <li>Có bộ lọc theo tháng, nhân viên, project, phòng ban.</li>
+              <li>Dashboard tổng quan.</li>
+              <li>Biểu đồ thống kê cơ bản.</li>
+            </ul>
+
+            <h4>Xuất dữ liệu</h4>
+            <ul>
+              <li>Export báo cáo ra Excel/CSV.</li>
+            </ul>
+
+            <h4>Import dữ liệu</h4>
+            <ul>
+              <li>Chỉ import master data project.</li>
+              <li>Phần chi tiết format import sẽ làm rõ ở giai đoạn tài liệu.</li>
+            </ul>
+
+            <h3>4.3. Tính năng cho Employee</h3>
+            <h4>Nhập giờ làm việc</h4>
+            <ul>
+              <li>Chọn ngày làm việc để nhập giờ.</li>
+              <li>Chọn project trong danh sách project đã được assign.</li>
+              <li>Nhập trực tiếp số giờ làm việc theo dạng số, ví dụ: <code>1</code>, <code>2.5</code>, <code>0.5</code>, <code>0.25</code>.</li>
+            </ul>
+
+            <h4>Quản lý dữ liệu đã nhập</h4>
+            <ul>
+              <li>Xem lại dữ liệu đã nhập.</li>
+              <li>Sửa dữ liệu đã nhập trong quá khứ.</li>
+              <li>Không được nhập dữ liệu cho ngày trong tương lai.</li>
+            </ul>
+
+            <h4>Xem thống kê cá nhân</h4>
+            <ul>
+              <li>Xem tổng số giờ làm việc của bản thân theo project, tháng.</li>
+              <li>Có thể xem các biểu đồ hoặc tổng hợp cơ bản.</li>
+            </ul>
+
+            <h4>Hồ sơ cá nhân</h4>
+            <ul>
+              <li>Xem và chỉnh sửa một số thông tin cá nhân.</li>
+              <li>Đổi mật khẩu.</li>
+              <li>Quên mật khẩu qua email.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section" id="quy-tac">
+          <div class="section-head">
+            <h2 class="section-title">5. Quy tắc nghiệp vụ đã chốt</h2>
+          </div>
+          <div class="section-body">
+            <table class="status-table">
+              <thead>
+                <tr>
+                  <th>Nhóm quy tắc</th>
+                  <th>Nội dung chốt</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Giờ chuẩn và OT</td>
+                  <td>Mặc định 1 ngày làm việc là 8 tiếng. Có thể nhập OT. Chỉ lưu <code>hours_worked</code>; OT sẽ được suy ra trong báo cáo nếu tổng giờ trong ngày lớn hơn 8.</td>
+                </tr>
+                <tr>
+                  <td>Nhập số lẻ</td>
+                  <td>Cho phép nhập số giờ lẻ như <code>0.25</code>, <code>0.5</code> và các giá trị thập phân phù hợp.</td>
+                </tr>
+                <tr>
+                  <td>Giới hạn ngày</td>
+                  <td>Cho nhập và sửa dữ liệu quá khứ. Không cho nhập ngày tương lai.</td>
+                </tr>
+                <tr>
+                  <td>Giới hạn tổng giờ</td>
+                  <td>Không cho phép tổng giờ trong một ngày vượt quá 24 tiếng.</td>
+                </tr>
+                <tr>
+                  <td>Kỳ công</td>
+                  <td>Kỳ công tính theo tháng. MVP chưa lock timesheet cuối tháng.</td>
+                </tr>
+                <tr>
+                  <td>Approval flow</td>
+                  <td>Dữ liệu nhập được ghi nhận ngay lên hệ thống. MVP chưa có quy trình submit, approve hoặc reject.</td>
+                </tr>
+                <tr>
+                  <td>Phân công project</td>
+                  <td>Nhân viên chỉ thấy và chỉ được nhập trên các project đã được assign cho mình.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="slack">
+          <div class="section-head">
+            <h2 class="section-title">6. Notification Slack</h2>
+          </div>
+          <div class="section-body">
+            <div class="callout">
+              <div class="callout-title">Reminder Logic</div>
+              <ul>
+                <li>Chỉ nhắc các nhân viên chưa nhập công.</li>
+                <li>Thời gian gửi nhắc: sau <code>20:00 JST</code>.</li>
+                <li>Chưa xử lý phân biệt nhân viên đang nghỉ phép.</li>
+                <li>Chưa loại trừ ngày lễ.</li>
+                <li>Chỉ loại trừ thứ 7 và chủ nhật.</li>
+              </ul>
+            </div>
+            <p class="lead">Trong MVP có thể phát sinh trường hợp notify chưa chính xác tuyệt đối do chưa quản lý leave hoặc holiday. Giới hạn này được chấp nhận để ưu tiên tốc độ triển khai.</p>
+          </div>
+        </section>
+
+        <section class="section" id="ky-thuat">
+          <div class="section-head">
+            <h2 class="section-title">7. Định hướng kỹ thuật</h2>
+          </div>
+          <div class="section-body">
+            <div class="grid-2">
+              <div class="mini-card">
+                <h4>Backend</h4>
+                <ul>
+                  <li>Laravel</li>
+                  <li>PostgreSQL</li>
+                  <li>JWT authentication</li>
+                  <li>Swagger/OpenAPI để mô tả API</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>Frontend</h4>
+                <ul>
+                  <li>VueJS 3</li>
+                  <li>TypeScript</li>
+                  <li>Tailwind CSS</li>
+                  <li>Dashboard và chart cho phần thống kê</li>
+                </ul>
+              </div>
+            </div>
+            <div class="mini-card" style="margin-top:14px;">
+              <h4>Infra</h4>
+              <ul>
+                <li>Docker cho môi trường phát triển và triển khai.</li>
+                <li>Triển khai trên AWS.</li>
+                <li>Domain/DNS qua Route53.</li>
+                <li>Backend và Frontend tách thành 2 project riêng trên GitHub.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="mo-rong">
+          <div class="section-head">
+            <h2 class="section-title">8. Hạng mục dự trù mở rộng về sau</h2>
+          </div>
+          <div class="section-body">
+            <ul>
+              <li>Profit/Loss theo dự án.</li>
+              <li>Billing theo project.</li>
+              <li>Tính toán theo man-day.</li>
+              <li>Lock kỳ công cuối tháng.</li>
+              <li>Workflow duyệt timesheet.</li>
+              <li>Quản lý leave/holiday.</li>
+              <li>Notification thông minh hơn.</li>
+              <li>Import dữ liệu timesheet lịch sử từ Excel.</li>
+              <li>Audit log chỉnh sửa giờ làm việc.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section" id="tai-lieu">
+          <div class="section-head">
+            <h2 class="section-title">9. Các điểm sẽ làm rõ ở bước tài liệu</h2>
+          </div>
+          <div class="section-body">
+            <ul>
+              <li>Danh sách màn hình hệ thống.</li>
+              <li>Flow nghiệp vụ cho từng nhóm chức năng.</li>
+              <li>Thiết kế database.</li>
+              <li>Thiết kế API.</li>
+              <li>Phân quyền chi tiết theo từng API.</li>
+              <li>Swagger/OpenAPI.</li>
+              <li>Flow Slack bot nhắc nhập công.</li>
+              <li>Cấu trúc import master data project.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section" id="ket-luan">
+          <div class="section-head">
+            <h2 class="section-title">10. Kết luận</h2>
+          </div>
+          <div class="section-body">
+            <p>Phạm vi MVP tập trung vào một hệ thống timesheet nội bộ đơn giản, rõ ràng, dễ dùng và bám sát cách nhập liệu từ Excel hiện tại. Mục tiêu là đưa vào vận hành sớm với các tính năng cốt lõi: quản lý project, nhân viên, phân công project, nhập giờ làm việc, thống kê và báo cáo; đồng thời giữ kiến trúc đủ mở để mở rộng sang quản trị nâng cao và bài toán tài chính dự án ở các giai đoạn tiếp theo.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="footer">Comparison version: Product spec style for schedule MVP timesheet document</div>
+  </div>
+</body>
+</html>
